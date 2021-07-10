@@ -1,56 +1,21 @@
-const fs = require('fs')
+const router = require("express").Router()
+const fs = require("fs")
 const path = require('path')
 
-module.exports = app => {
+router.get("/notes", async(req, res) =>{
+    //need code for get route
+    const data = await fs.promises.readFile(path.join(__dirname,"../db/db.json"), "utf8")
+    const notes = JSON.parse(data)
+    console.log(notes)
+    res.json(notes)
+})
 
-    //create notes variable
-    fs.readFile("./db/db.json", (err, data) => {
-        if (err) throw err;
-        var notes = JSON.parse(data);
-    })
+router.post("/notes", (req, res) => {
+    // need code for post route
+})
 
-    // API ROUTES BELOW -----------
+router.delete("/notes/:id", (req, res) => {
+    //need code for delete route
+})
 
-    //sets up the api's 'get route'
-    app.get('/api/notes', function (req, res) {
-        res.json(notes);
-    })
-
-    //api post route
-
-    app.post('/api/notes', function (req, res) {
-        let newNote = req.body;
-        notes.push(newNote);
-        updateDB();
-        return console.log('added note: ' + newNote.title)
-    });
-
-    //gets note with ID
-
-    app.get('/api/notes/:id', function (req, res) {
-        res.json(notes[req.params.id])
-    });
-
-    //DISPLAY ROUTE -----
-
-    // display notes.html when /notes is hit. 
-
-    app.get('./notes', function (req, res) {
-        res.sendFile(path.join(_dirname, './notes.html'))
-    });
-
-    // display index.html when all are hit
-
-    app.get('*', function (req, res) {
-        res.sendFile(path.join(_dirname, './index.html'))
-    });
-
-    //update the json file when note is + or -
-
-    function updateDB() {
-        fs.writeFile('./db/db.json', JSON.stringify(notes, '\t'), err => {
-            if (err) throw err;
-            return true;
-        })
-    }
-}
+module.exports = router
